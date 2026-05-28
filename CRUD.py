@@ -163,16 +163,16 @@ def adicionar_vulnerabilidade(id):
 
         print(f'A seguinte vulnerabilidade foi salva:')   #Mostra A vulnerabilidade criada
         for k, v in vulnerabilidade_temporaria.items():
-            if k == "Tipo":
+            if k in ("Severidade", "Status"):
                 print(f'{k} = {v.name}')
             else:
                 print(f'{k} = {v}')
 
 
-        mais_vuln = validador_str('Deseja adicionar mais uma vulnerabilidade? [S/N] ')
+        mais_vuln = validador_str('Deseja adicionar mais uma vulnerabilidade? [S/N] ').upper().strip()
         while mais_vuln not in ('S', 'N'):
             print('ESCOLHA UMA OPÇÃO VÁLIDA!')
-            mais_vuln = validador_str('Deseja adicionar mais uma vulnerabilidade? [S/N] ')
+            mais_vuln = validador_str('Deseja adicionar mais uma vulnerabilidade? [S/N] ').upper().strip()
 
         if mais_vuln == 'N':
             break
