@@ -38,7 +38,7 @@ ativos_dicionario = {                      #Informações dos ativos
         "Tipo": TipoAtivos.ROTEADOR
         },
 
-    4: {"Nome": "Aplicação Web",
+    4: {"Nome": "Site-504",
         "Descrição": "Aplicação Web da empresa.",
         "Responsável": "Maria Eduarda da Silva",
         "Setor": "Gerente de Projeto",
