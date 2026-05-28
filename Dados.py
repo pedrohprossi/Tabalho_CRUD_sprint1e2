@@ -1,5 +1,5 @@
 import json
-from Ativos import ativos, vulnerabilidades, TipoAtivos, Severidade
+from Ativos import ativos, vulnerabilidades, TipoAtivos, TipoSeveridade, TipoStatus
 
 
 def salvar_ativos():  # Salva os ativos em JSON
@@ -9,7 +9,7 @@ def salvar_ativos():  # Salva os ativos em JSON
 
     for k, v in ativos.items():  # Transformar Enum em string para o JSON ler
         ativos_copia = v.copy()
-        ativos_copia["tipo"] = ativos_copia["tipo"].value
+        ativos_copia["Tipo"] = ativos_copia["Tipo"].value
         ativos_temporario[k] = ativos_copia
 
 
@@ -33,7 +33,7 @@ def carregar_ativos():  # Le os ativo do arquivo JSON
 
     for k, v in ativos_json.items():  # Transforma string de volta em Enum pro python
         ativos_copia = v.copy()
-        ativos_copia["tipo"] = TipoAtivos(v["tipo"])
+        ativos_copia["Tipo"] = TipoAtivos(v["Tipo"])
         ativos_final[int(k)] = ativos_copia
 
     return ativos_final  # Retorna os ativos em Enum
@@ -50,7 +50,8 @@ def salvar_vulnerabilidade():  #Salva as vulnerabilidades em JSON
         lista_conv_enum = []
         for vuln in lista:
             vulnerabilidade_copia = vuln.copy()
-            vulnerabilidade_copia["severidade"] = vulnerabilidade_copia["severidade"].value
+            vulnerabilidade_copia["Severidade"] = vulnerabilidade_copia["Severidade"].value
+            vulnerabilidade_copia["Status"] = vulnerabilidade_copia["Status"].value
             lista_conv_enum.append(vulnerabilidade_copia)
         vulnerabilidade_temporaria[k] = lista_conv_enum
 
@@ -76,7 +77,8 @@ def carregar_vulnerabilidade():       #Le as vulnerabilidades do arquivo JSON
         lista_conv_enum = []
         for vuln in lista:
             vulnerabilidade_copia = vuln.copy()
-            vulnerabilidade_copia["severidade"] = Severidade(vulnerabilidade_copia["severidade"])
+            vulnerabilidade_copia["Severidade"] =TipoSeveridade(vulnerabilidade_copia["Severidade"])
+            vulnerabilidade_copia["Status"] = TipoStatus(vulnerabilidade_copia["Status"])
             lista_conv_enum.append(vulnerabilidade_copia)
         vulnerabilidade_final[int(k)] = lista_conv_enum
 
