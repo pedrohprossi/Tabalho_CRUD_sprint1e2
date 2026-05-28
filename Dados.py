@@ -1,5 +1,5 @@
 import json
-from Ativos import ativos, vulnerabilidades, TipoAtivos, TipoSeveridade, TipoStatus
+from Ativos import ativos_dicionario, vulnerabilidades_dicionario, TipoAtivos, TipoSeveridade, TipoStatus
 
 
 def salvar_ativos():  # Salva os ativos em JSON
@@ -7,7 +7,7 @@ def salvar_ativos():  # Salva os ativos em JSON
     ativos_copia = {}
 
 
-    for k, v in ativos.items():  # Transformar Enum em string para o JSON ler
+    for k, v in ativos_dicionario.items():  # Transformar Enum em string para o JSON ler
         ativos_copia = v.copy()
         ativos_copia["Tipo"] = ativos_copia["Tipo"].value
         ativos_temporario[k] = ativos_copia
@@ -46,7 +46,7 @@ def salvar_vulnerabilidade():  #Salva as vulnerabilidades em JSON
     vulnerabilidade_copia = {}
 
 
-    for k, lista in vulnerabilidades.items():       # Transformar Enum em string para o JSON ler
+    for k, lista in vulnerabilidades_dicionario.items():       # Transformar Enum em string para o JSON ler
         lista_conv_enum = []
         for vuln in lista:
             vulnerabilidade_copia = vuln.copy()
