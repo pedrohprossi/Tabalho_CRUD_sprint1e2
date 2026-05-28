@@ -13,7 +13,7 @@ class TipoAtivos(Enum):         #Classe com herança do Enum para definir o tipo
 
 
 
-ativos = {                      #Informações dos ativos
+ativos_dicionario = {                      #Informações dos ativos
     1: {"Nome": "Notebook-DELLI15",
         "Descrição": "Notebook Dell Inspiron 15 utilizado pelo gerente de TI.",
         "Responsável": "Raul Santos",
@@ -64,7 +64,7 @@ class TipoStatus(Enum):         #Classe com herança do Enum para definir o stat
 
 
 
-vulnerabilidades = {             #Vulnerabilidades dos ativos
+vulnerabilidades_dicionario = {             #Vulnerabilidades dos ativos
     1: [{"Vulnerabilidade": "Disco sem criptografia",
         "Risco": "Vazamento de dados em caso de roubo.",
         "Categoria": "Configuração",
