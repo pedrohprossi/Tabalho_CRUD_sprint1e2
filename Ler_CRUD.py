@@ -2,7 +2,7 @@ from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, T
 from Modulos_salvar import salvar_ativos, carregar_ativos, salvar_vulnerabilidade, carregar_vulnerabilidade
 from Modulos_adicionais import validador_int, validador_str
 from Criar_CRUD import adicionar_vulnerabilidade
-from Atualizar_CRUD import atualizar_crud
+from Atualizar_CRUD import atualizar_crud, atualizar_vulnerabilidade
 
 
 
@@ -28,13 +28,9 @@ def ler_crud():
                 if id not in ativos_dicionario:
                     print('DIGITE UM ID VÁLIDO!')
                     continue
-
-                for k, v in ativos_dicionario[id].items():
-                    if k == 'Tipo':
-                        print(f'{k} = {v.name.lower().capitalize()}')
-                    else:
-                        print(f'{k} = {v}')
-
+                
+                break
+            
 
             except ValueError:
                 
@@ -44,17 +40,20 @@ def ler_crud():
                         if ler_escolha in v["Nome"].lower():
                             id = k
                             encontrado = True
-
-                            for chave, valor in ativos_dicionario[k].items():
-                                if chave == 'Tipo':
-                                    print(f'{chave} = {valor.name.lower().capitalize()}')
-                                else:
-                                    print(f'{chave} = {valor}')
+                            break
 
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
                     
+        
+        for k, v in ativos_dicionario[id].items():
+            if k == 'Tipo':
+                print(f'{k} = {v.name.lower().capitalize()}')
+            else:
+                print(f'{k} = {v}')
+
+
 
 
             print('''Opções de continuação:
@@ -64,9 +63,19 @@ def ler_crud():
 [4] Voltar ao menu
 ''')
             escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+            
             while escolha_continuacao not in (1, 2, 3, 4):
+
                 print('ESCOLHA UMA OPÇÃO EXISTENTE!')
+                print('''Opções de continuação:
+[1] Atualizar ativo
+[2] Ler vulnerabilidades do ativo
+[3] Ler outro ativo
+[4] Voltar ao menu
+''')
+                
                 escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+
 
             if escolha_continuacao == 1:
                 atualizar_crud(id)
@@ -77,8 +86,10 @@ def ler_crud():
                 ler_vulnerabilidade(id)
                 return
 
+
             elif escolha_continuacao == 3:
                 break
+
 
             else:
                 return
@@ -100,20 +111,42 @@ def ler_vulnerabilidade(id):
 
         print('Vulnerabilidade: ')
         for i, vuln in enumerate(vulnerabilidades_dicionario[id], start=1):
-            print(f'[{i}] {vuln["Vulnerabilidade"]}')
+            print(f'[{i}] - {vuln["Vulnerabilidade"]}')
 
-        escolha_vulnerabilidade = validador_int('Escolha a vulnerabilidade que deseja ver: ')
-        while escolha_vulnerabilidade < 1 or escolha_vulnerabilidade > len(vulnerabilidades_dicionario[id]):
-            print('DIGITE UMA OPÇÃO VÁLIDA!')
-            escolha_vulnerabilidade = validador_int('Escolha a vulnerabilidade que deseja ver: ')
 
-        vuln_escolhida = vulnerabilidades_dicionario[id][escolha_vulnerabilidade - 1]
+        escolha_vulnerabilidade = input('Escolha a vulnerabilidade que deseja ver: ').lower().strip()
+
+        try: 
+            vn = int(escolha_vulnerabilidade)
+            if vn < 1 or vn > len(vulnerabilidades_dicionario[id]):
+                    print('DIGITE UM ID VÁLIDO!')
+                    continue
+
+
+        except ValueError:
+                encontrado = False
+
+                for k, v in enumerate(vulnerabilidades_dicionario[id], start=1):
+                    if escolha_vulnerabilidade in v["Vulnerabilidade"].lower():
+                        vn = k
+                        encontrado = True
+                        break
+
+
+                if not encontrado:
+                    print(f'DIGITE UM VULNERABILIDADE VÁLIDA!')
+                    continue    
+
+
+        vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]
 
         for k, v in vuln_escolhida.items():
             if k == 'Severidade' or k == 'Status':
                 print(f'{k} = {v.name.lower().capitalize()}')
             else:
                 print(f'{k} = {v}')
+
+
 
         print('''Opções de continuação:
               

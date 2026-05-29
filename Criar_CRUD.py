@@ -5,7 +5,7 @@ from Modulos_adicionais import validador_int, validador_str
 
 
 
-#------------------------------CRIAR-------------------------------------#
+#------------------------------CRIAR CRUD-------------------------------------#
 
 
 
@@ -83,6 +83,7 @@ def criar_crud():                      #função de criar do CRUD
 
 
 
+#------------------------------CRIAR VULNERABILIDADE-------------------------------------#
 
 def adicionar_vulnerabilidade(id):
     if id not in vulnerabilidades_dicionario:
