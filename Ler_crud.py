@@ -89,3 +89,6 @@ def ler_crud():
 
 
 #----------------------------LER VULNERABILIDADE-------------------------------#
+
+def ler_vulnerabilidade(id):
+    
