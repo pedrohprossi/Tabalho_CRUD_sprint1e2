@@ -11,10 +11,13 @@ from Modulos_adicionais import validador_int, validador_str
 
 def criar_crud():                      #função de criar do CRUD
 
-    id = validador_int('Digite o ID do novo ativo: ')
-    while id in ativos_dicionario:                #Não deixa escolher um id já pertencente à outro ativo
-        print('ESSE ID JÁ PERTENCE À OUTRO ATIVO!')
-        id = validador_int('Digite o ID do novo ativo: ')
+    if ativos_dicionario:
+        id = max(ativos_dicionario.keys()) + 1
+    else:
+        id = 1
+
+
+    print(f'O ID gerado foi {id}')
 
 
     nome = validador_str('Digite o nome do novo ativo: ')
