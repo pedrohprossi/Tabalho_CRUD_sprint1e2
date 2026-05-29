@@ -1,41 +1,13 @@
 from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, TipoSeveridade, TipoStatus
-from Dados import salvar_ativos, carregar_ativos, salvar_vulnerabilidade, carregar_vulnerabilidade
-####colocar cor no codigo#####
-
-
-def validador_str(msg):      #Validador de string
-    info = input(msg).strip()
-
-
-    while not info:
-        print('O ESPAÇO NÃO DEVE SER DEIXADO EM BRANCO!')
-        info = input(msg).strip()
-    return info
-
-
-
-
-def validador_int(num):       #validador string + validador intenger
-    while True:
-        num_str = input(num).strip()
-
-
-        if not num_str:
-            print('O ESPAÇO NÃO DEVE SER DEIXADO EM BRANCO!')
-            continue
-
-
-        try:
-            return int(num_str)
-        except ValueError:
-            print(f'DIGITE UM NÚMERO INTEIRO!')
-
-
+from Modulos_salvar import salvar_ativos, carregar_ativos, salvar_vulnerabilidade, carregar_vulnerabilidade
+from Modulos_adicionais import validador_int, validador_str
 
 
 
 
 #------------------------------CRIAR-------------------------------------#
+
+
 
 def criar_crud():                      #função de criar do CRUD
 
@@ -176,25 +148,3 @@ def adicionar_vulnerabilidade(id):
 
         if mais_vuln == 'N':
             break
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#----------------------------LER-------------------------------#
