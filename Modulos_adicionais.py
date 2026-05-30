@@ -15,7 +15,7 @@ def validador_str(msg):      #Validador de string
 
 
 
-def validador_int(num):       #validador string + validador intenger
+def validador_int(num):       #validador string + validador de inteiro
     while True:
         num_str = input(num).strip()
 
@@ -29,13 +29,3 @@ def validador_int(num):       #validador string + validador intenger
             return int(num_str)
         except ValueError:
             print(f'DIGITE UM NÚMERO INTEIRO!')
-
-
-
-
-
-
-
-
-
-

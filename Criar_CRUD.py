@@ -11,28 +11,26 @@ from Modulos_adicionais import validador_int, validador_str
 
 def criar_crud():                      #função de criar do CRUD
 
-    if ativos_dicionario:
+    if ativos_dicionario:           #Gera o id do ativo, se não existir nenhum ativo o id = 1
         id = max(ativos_dicionario.keys()) + 1
     else:
         id = 1
 
 
-    print(f'O ID gerado foi {id}')
+    print(f'O ID gerado foi {id}')  #Mostra o id gerado
 
 
+    #Criação das informações do ativo
     nome = validador_str('Digite o nome do novo ativo: ')
-
 
     descricao = validador_str('Digite a descrição do novo ativo: ')
 
-
     responsavel = validador_str('Digite o/a responsável pelo novo ativo: ')
-
 
     setor = validador_str('Digite o setor do novo ativo: ')
 
-
     localizacao = validador_str('Digite a localização do novo ativo: ')
+
 
 
     for t in TipoAtivos:              #Mostra os tipos de ativos e pede a escolha
@@ -48,7 +46,7 @@ def criar_crud():                      #função de criar do CRUD
 
 
 
-    ativos_dicionario[id] = {"Nome": nome,
+    ativos_dicionario[id] = {"Nome": nome,    #Coloca as informações criadas no dicionario
         "Descrição": descricao,
         "Responsável": responsavel,
         "Setor": setor,
@@ -61,7 +59,7 @@ def criar_crud():                      #função de criar do CRUD
     salvar_ativos()
 
 
-    print(f'O seguinte ativo foi salvo:')   #Mosstra o ativo criado
+    print(f'O seguinte ativo foi salvo:')   #Mostra o ativo criado
     for k, v in ativos_dicionario[id].items():
         if k == "Tipo":
             print(f'{k} = {v.name}')
@@ -70,28 +68,43 @@ def criar_crud():                      #função de criar do CRUD
 
 
 
-    colocar_vulnerabilidade = validador_str('Deseja adicionar uma vulnerabilidade ao ativo? [S/N] ').upper().strip()
-    while colocar_vulnerabilidade not in ('S', 'N'):
-        print('ESCOLHA UMA OPÇÃO VÁLIDA!')
-        colocar_vulnerabilidade = validador_str('Deseja adicionar uma vulnerabilidade ao ativo? [S/N] ').upper().strip()
 
+    # Opções de continuação
+    print('''Opções de continuação:
 
-    if colocar_vulnerabilidade == 'S':
+[1] Cadastrar vulnerabilidade
+[2] Voltar ao menu
+''')
+
+    escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+
+    while escolha_continuacao not in (1, 2):
+        print('ESCOLHA UMA OPÇÃO EXISTENTE!')
+        escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+
+    if escolha_continuacao == 1:
         vulnerabilidades_dicionario[id] = []
         adicionar_vulnerabilidade(id)
-    
+
+    else:
+        return
+
+
+
+
 
 
 
 #------------------------------CRIAR VULNERABILIDADE-------------------------------------#
 
-def adicionar_vulnerabilidade(id):
-    if id not in vulnerabilidades_dicionario:
+def adicionar_vulnerabilidade(id):              #Cria vulnerabilidade
+    if id not in vulnerabilidades_dicionario:   #Caso crie a vulnerabilidade direto do menu e o ativo não tenha nenhuma outra
         vulnerabilidades_dicionario[id] = []
 
 
     while True:
 
+        #Informações das vulnerabilidades
         vulnerabilidade = validador_str('Digite a vulnerabilidade do ativo: ')
 
 
@@ -101,7 +114,7 @@ def adicionar_vulnerabilidade(id):
         categoria = validador_str('Digite a categoria da vulnerabilidade: ')
 
 
-        for sev in TipoSeveridade:  # Mostra as severidades da vulnerabilidade e pede a escolha
+        for sev in TipoSeveridade:      # Mostra as severidades da vulnerabilidade e pede a escolha
             print(f'[{sev.value}] = {sev.name}')
 
         while True:
@@ -113,7 +126,7 @@ def adicionar_vulnerabilidade(id):
                 print('TIPO ESCOLHIDO INVÁLIDO, ESCOLHA UM TIPO DA LISTA!')
 
 
-        for sta in TipoStatus:  # Mostra os status da vulnerabilidade do ativo e pede a escolha
+        for sta in TipoStatus:       # Mostra os status da vulnerabilidade do ativo e pede a escolha
             print(f'[{sta.value}] = {sta.name}')
 
         while True:
@@ -125,7 +138,7 @@ def adicionar_vulnerabilidade(id):
                 print('TIPO ESCOLHIDO INVÁLIDO, ESCOLHA UM TIPO DA LISTA!')
 
 
-        vulnerabilidade_temporaria = {"Vulnerabilidade" : vulnerabilidade,
+        vulnerabilidade_temporaria = {"Vulnerabilidade" : vulnerabilidade,              #Salva em dicionario a vulnerabilidade
             "Risco" : risco,
             "Categoria" : categoria,
             "Severidade" : severidade,
@@ -133,7 +146,7 @@ def adicionar_vulnerabilidade(id):
         }
 
 
-        vulnerabilidades_dicionario[id].append(vulnerabilidade_temporaria)
+        vulnerabilidades_dicionario[id].append(vulnerabilidade_temporaria)        #Salva na lista principal
         salvar_vulnerabilidade()
 
 
@@ -145,10 +158,22 @@ def adicionar_vulnerabilidade(id):
                 print(f'{k} = {v}')
 
 
-        mais_vuln = validador_str('Deseja adicionar mais uma vulnerabilidade? [S/N] ').upper().strip()
-        while mais_vuln not in ('S', 'N'):
-            print('ESCOLHA UMA OPÇÃO VÁLIDA!')
-            mais_vuln = validador_str('Deseja adicionar mais uma vulnerabilidade? [S/N] ').upper().strip()
 
-        if mais_vuln == 'N':
-            break
+            # Opções de continuação
+            print('''Opções de continuação:
+
+        [1] Cadastrar outra vulnerabilidade
+        [2] Voltar ao menu
+        ''')
+
+            escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+
+            while escolha_continuacao not in (1, 2):
+                print('ESCOLHA UMA OPÇÃO EXISTENTE!')
+                escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+
+            if escolha_continuacao == 1:
+                continue
+
+            else:
+                return
