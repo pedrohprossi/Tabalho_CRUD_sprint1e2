@@ -1,9 +1,6 @@
-from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, TipoSeveridade, TipoStatus
+#------------------VALIDADOR DE STRING-----------------#
 
-####colocar cor no codigo#####
-
-
-def validador_str(msg):      #Validador de string
+def validador_str(msg):      
     info = input(msg).strip()
 
 
@@ -14,6 +11,8 @@ def validador_str(msg):      #Validador de string
 
 
 
+
+#--------------VALIDADOR DE STRING E INTEIRO--------------#
 
 def validador_int(num):       #validador string + validador de inteiro
     while True:

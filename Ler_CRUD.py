@@ -55,36 +55,36 @@ def ler_crud():    #Le os ativos
 
 
 
-            #Opções de continuação, coloquei para atualizar por aqui também
-            print('''Opções de continuação:
+        #Opções de continuação, coloquei para atualizar por aqui também
+        print('''Opções de continuação:
 [1] Atualizar ativo
 [2] Ler vulnerabilidades do ativo
 [3] Ler outro ativo
 [4] Voltar ao menu
 ''')
-            escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+        escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
             
-            while escolha_continuacao not in range(1, 5):
+        while escolha_continuacao not in range(1, 5):
 
-                print('ESCOLHA UMA OPÇÃO EXISTENTE!')
-                escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+            print('ESCOLHA UMA OPÇÃO EXISTENTE!')
+            escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
 
 
-            if escolha_continuacao == 1:
+        if escolha_continuacao == 1:
                 atualizar_crud(id)
                 return
 
 
-            elif escolha_continuacao == 2:
+        elif escolha_continuacao == 2:
                 ler_vulnerabilidade(id)
                 return
 
 
-            elif escolha_continuacao == 3:
+        elif escolha_continuacao == 3:
                 break
 
 
-            else:
+        else:
                 return
 
 
@@ -102,10 +102,10 @@ def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
 
             while True:
                 # Escolha do ativo com tratamento try e except para aceitar id ou nome
-                deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
+                ler_escolha = input('Digite o ativo que deseja ler vulnerabilidade: ').strip().lower()
 
                 try:
-                    id = int(deletar_escolha)
+                    id = int(ler_escolha)
 
                     if id not in ativos_dicionario:
                         print('DIGITE UM ID VÁLIDO!')
@@ -118,7 +118,7 @@ def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
                     encontrado = False
 
                     for k, v in ativos_dicionario.items():
-                        if deletar_escolha in v["Nome"].lower():
+                        if ler_escolha in v["Nome"].lower():
                             id = k
                             encontrado = True
                             break
@@ -141,27 +141,27 @@ def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
 
         #Escolha da vulnerabilidade, funciona colocando a opção ou a vulnerabilidade
         escolha_vulnerabilidade = input('Escolha a vulnerabilidade que deseja ver: ').lower().strip()
+        while True:
+            try: 
+                vn = int(escolha_vulnerabilidade)
+                if vn < 1 or vn > len(vulnerabilidades_dicionario[id]):
+                        print('DIGITE UM ID VÁLIDO!')
+                        continue
+                break
 
-        try: 
-            vn = int(escolha_vulnerabilidade)
-            if vn < 1 or vn > len(vulnerabilidades_dicionario[id]):
-                    print('DIGITE UM ID VÁLIDO!')
-                    continue
-            break
+            except ValueError:
+                    encontrado = False
 
-        except ValueError:
-                encontrado = False
-
-                for k, v in enumerate(vulnerabilidades_dicionario[id], start=1):
-                    if escolha_vulnerabilidade in v["Vulnerabilidade"].lower():
-                        vn = k
-                        encontrado = True
-                        break
+                    for k, v in enumerate(vulnerabilidades_dicionario[id], start=1):
+                        if escolha_vulnerabilidade in v["Vulnerabilidade"].lower():
+                            vn = k
+                            encontrado = True
+                            break
 
 
-                if not encontrado:
-                    print(f'DIGITE UM VULNERABILIDADE VÁLIDA!')
-                    continue    
+                    if not encontrado:
+                        print(f'DIGITE UM VULNERABILIDADE VÁLIDA!')
+                        continue    
 
 
         vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]  #Diminui um para compatilidade com a lista
@@ -174,12 +174,11 @@ def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
 
 
         #Opções de continuação, coloquei para atualizar as vulnerabilidades por aqui também
-        print('''Opções de continuação:
-              
-[1] Atualizar vulnerabilidade
-[2] Ler outra vulnerabilidade do ativo
-[3] Voltar ao menu
-''')
+        print('''Opções de continuação:            
+    [1] Atualizar vulnerabilidade
+    [2] Ler outra vulnerabilidade do ativo
+    [3] Voltar ao menu
+    ''')
         escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
         while escolha_continuacao not in (1, 2, 3):
             print('ESCOLHA UMA OPÇÃO EXISTENTE!')

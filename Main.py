@@ -18,7 +18,7 @@ while True:
 
 
     print('''[1] Cadastrar 
-    [2] Buscar 
+    [2] Ler
     [3] Atualizar 
     [4] Deletar 
     [5] Sair do programa
@@ -47,15 +47,15 @@ while True:
     
 
     elif escolha_menu == 2:
-        print('''[1] Buscar um ativo
-[2] Buscar uma vulnerabilidade
+        print('''[1] Ler um ativo
+[2] Ler uma vulnerabilidade
 ''')
-        escolha_buscar = validador_int('Digite o que deseja buscar: ')
-        while escolha_buscar not in (1, 2):
+        escolha_ler = validador_int('Digite o que deseja ler: ')
+        while escolha_ler not in (1, 2):
             print('ESCOLHA UMA OPÇÃO VÁLIDA!')
-            escolha_buscar = validador_int('Digite o que deseja buscar: ')
+            escolha_ler = validador_int('Digite o que deseja ler: ')
         
-        if escolha_buscar == 1:
+        if escolha_ler == 1:
             ler_crud()
         else:
             ler_vulnerabilidade(id=None)

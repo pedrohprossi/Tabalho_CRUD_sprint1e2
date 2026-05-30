@@ -98,9 +98,6 @@ def criar_crud():                      #função de criar do CRUD
 #------------------------------CRIAR VULNERABILIDADE-------------------------------------#
 
 def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
-    if id not in vulnerabilidades_dicionario:   #Caso crie a vulnerabilidade direto do menu e o ativo não tenha nenhuma outra
-        vulnerabilidades_dicionario[id] = []
-
 
     if id == None:
             for k, v in ativos_dicionario.items():
@@ -108,10 +105,10 @@ def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
 
             while True:
                 # Escolha do ativo com tratamento try e except para aceitar id ou nome
-                deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
+                criar_escolha = input('Digite o ativo que deseja cadastrar a vulnerabilidade: ').strip().lower()
 
                 try:
-                    id = int(deletar_escolha)
+                    id = int(criar_escolha)
 
                     if id not in ativos_dicionario:
                         print('DIGITE UM ID VÁLIDO!')
@@ -124,7 +121,7 @@ def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
                     encontrado = False
 
                     for k, v in ativos_dicionario.items():
-                        if deletar_escolha in v["Nome"].lower():
+                        if criar_escolha in v["Nome"].lower():
                             id = k
                             encontrado = True
                             break
@@ -132,6 +129,10 @@ def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
+
+
+    if id not in vulnerabilidades_dicionario:   #Caso crie a vulnerabilidade direto do menu e o ativo não tenha nenhuma outra
+        vulnerabilidades_dicionario[id] = []
 
 
     while True:
@@ -192,20 +193,20 @@ def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
 
 
             # Opções de continuação
-            print('''Opções de continuação:
+        print('''Opções de continuação:
 
         [1] Cadastrar outra vulnerabilidade
         [2] Voltar ao menu
         ''')
 
+        escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
+
+        while escolha_continuacao not in (1, 2):
+            print('ESCOLHA UMA OPÇÃO EXISTENTE!')
             escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
 
-            while escolha_continuacao not in (1, 2):
-                print('ESCOLHA UMA OPÇÃO EXISTENTE!')
-                escolha_continuacao = validador_int('Digite a opção que deseja efetuar: ')
-
-            if escolha_continuacao == 1:
+        if escolha_continuacao == 1:
                 continue
 
-            else:
-                return
+        else:
+            return

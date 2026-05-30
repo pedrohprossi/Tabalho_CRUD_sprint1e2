@@ -166,7 +166,7 @@ def deletar_vulnerabilidade(id=None):
                             break
 
                     if not encontrado:
-                        print(f'DIGITE UM VULNERABILIDADE VÁLIDA!')
+                        print(f'DIGITE UMA VULNERABILIDADE VÁLIDA!')
                         continue
 
 
