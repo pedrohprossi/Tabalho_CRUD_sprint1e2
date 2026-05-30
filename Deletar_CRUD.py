@@ -72,39 +72,39 @@ def deletar_crud():
 
 #--------------DELETAR VULNERABILIDADES-----------------#
 
-def deletar_vulnerabilidade():
+def deletar_vulnerabilidade(id=None):
 
     while True:
+        if id == None:
+            for k, v in ativos_dicionario.items():
+                print(f'{k} = {v["Nome"]}')
 
-        for k, v in ativos_dicionario.items():
-            print(f'{k} = {v["Nome"]}')
+            while True:
+                # Escolha do ativo com tratamento try e except para aceitar id ou nome
+                deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
 
-        while True:
-            # Escolha do ativo com tratamento try e except para aceitar id ou nome
-            deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
+                try:
+                    id = int(deletar_escolha)
 
-            try:
-                id = int(deletar_escolha)
-
-                if id not in ativos_dicionario:
-                    print('DIGITE UM ID VÁLIDO!')
-                    continue
-                break
+                    if id not in ativos_dicionario:
+                        print('DIGITE UM ID VÁLIDO!')
+                        continue
+                    break
 
 
-            except ValueError:
+                except ValueError:
 
-                encontrado = False
+                    encontrado = False
 
-                for k, v in ativos_dicionario.items():
-                    if deletar_escolha in v["Nome"].lower():
-                        id = k
-                        encontrado = True
-                        break
+                    for k, v in ativos_dicionario.items():
+                        if deletar_escolha in v["Nome"].lower():
+                            id = k
+                            encontrado = True
+                            break
 
-                if not encontrado:
-                    print(f'DIGITE UM NOME VÁLIDO!')
-                    continue
+                    if not encontrado:
+                        print(f'DIGITE UM NOME VÁLIDO!')
+                        continue
 
 
 
@@ -131,7 +131,7 @@ def deletar_vulnerabilidade():
 
             if confirmacao_deletar_tudo == 'S':
                 del vulnerabilidades_dicionario[id]
-                salvar_ativos()
+                salvar_vulnerabilidade()
 
             else:
                 return
@@ -143,49 +143,50 @@ def deletar_vulnerabilidade():
             for i, vuln in enumerate(vulnerabilidades_dicionario[id], start=1):
                 print(f'{i} = {vuln["Vulnerabilidade"]}')
 
+
+            while True:
+
                 # Escolha da vulnerabilidade, funciona colocando a opção ou a vulnerabilidade
                 deletar_escolha_vulnerabilidade = input('Escolha a vulnerabilidade que deseja deletar: ').lower().strip()
 
-
-                while True:
-                    try:
-                        vn = int(deletar_escolha_vulnerabilidade)
-                        if vn < 1 or vn > len(vulnerabilidades_dicionario[id]):
+                try:
+                    vn = int(deletar_escolha_vulnerabilidade)
+                    if vn < 1 or vn > len(vulnerabilidades_dicionario[id]):
                             print('DIGITE UM ID VÁLIDO!')
                             continue
-                        break
+                    break
 
-                    except ValueError:
-                        encontrado = False
+                except ValueError:
+                    encontrado = False
 
-                        for k, v in enumerate(vulnerabilidades_dicionario[id], start=1):
-                            if deletar_escolha_vulnerabilidade in v["Vulnerabilidade"].lower():
-                                vn = k
-                                encontrado = True
-                                break
+                    for k, v in enumerate(vulnerabilidades_dicionario[id], start=1):
+                        if deletar_escolha_vulnerabilidade in v["Vulnerabilidade"].lower():
+                            vn = k
+                            encontrado = True
+                            break
 
-                        if not encontrado:
-                            print(f'DIGITE UM VULNERABILIDADE VÁLIDA!')
-                            continue
+                    if not encontrado:
+                        print(f'DIGITE UM VULNERABILIDADE VÁLIDA!')
+                        continue
 
 
-                vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]  # Diminui um para compatilidade com a lista
+            vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]  # Diminui um para compatilidade com a lista
 
-                print('Vulnerabilidade escolhida:')
-                for k, v in vuln_escolhida.items():  # Mostra a vulnerabilidade
-                    if k == 'Severidade' or k == 'Status':
-                        print(f'{k} = {v.name.lower().capitalize()}')
-                    else:
-                        print(f'{k} = {v}')
+            print('Vulnerabilidade escolhida:')
+            for k, v in vuln_escolhida.items():  # Mostra a vulnerabilidade
+                if k == 'Severidade' or k == 'Status':
+                    print(f'{k} = {v.name.lower().capitalize()}')
+                else:
+                    print(f'{k} = {v}')
 
+            confirmacao_deletar = validador_str(f'Tem certeza que deseja deletar a vulnerabilidade {vuln_escolhida["Vulnerabilidade"]}? [S/N]').upper()
+            while confirmacao_deletar not in ('S', 'N'):
+                print('DIGITE UMA OPÇÃO VÁLIDA!')
                 confirmacao_deletar = validador_str(f'Tem certeza que deseja deletar a vulnerabilidade {vuln_escolhida["Vulnerabilidade"]}? [S/N]').upper()
-                while confirmacao_deletar not in ('S', 'N'):
-                    print('DIGITE UMA OPÇÃO VÁLIDA!')
-                    confirmacao_deletar = validador_str(f'Tem certeza que deseja deletar a vulnerabilidade {vuln_escolhida["Vulnerabilidade"]}? [S/N]').upper()
 
-                if confirmacao_deletar == 'S':
+            if confirmacao_deletar == 'S':
                     vulnerabilidades_dicionario[id].pop(vn-1)
                     salvar_vulnerabilidade()
 
-                else:
-                    return
+            else:
+                return

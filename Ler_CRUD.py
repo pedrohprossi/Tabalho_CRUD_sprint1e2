@@ -94,7 +94,40 @@ def ler_crud():    #Le os ativos
 
 #----------------------------LER VULNERABILIDADE-------------------------------#
 
-def ler_vulnerabilidade(id):       #Le as vulnerabilidades
+def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
+
+    if id == None:
+            for k, v in ativos_dicionario.items():
+                print(f'{k} = {v["Nome"]}')
+
+            while True:
+                # Escolha do ativo com tratamento try e except para aceitar id ou nome
+                deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
+
+                try:
+                    id = int(deletar_escolha)
+
+                    if id not in ativos_dicionario:
+                        print('DIGITE UM ID VÁLIDO!')
+                        continue
+                    break
+
+
+                except ValueError:
+
+                    encontrado = False
+
+                    for k, v in ativos_dicionario.items():
+                        if deletar_escolha in v["Nome"].lower():
+                            id = k
+                            encontrado = True
+                            break
+
+                    if not encontrado:
+                        print(f'DIGITE UM NOME VÁLIDO!')
+                        continue
+
+
 
     if id not in vulnerabilidades_dicionario or not vulnerabilidades_dicionario[id]:    #Caso o ativo não tenha vulnerabilidade
         print('O ATIVO NÃO POSSUI VULNERABILIDADES REGISTRADAS!')

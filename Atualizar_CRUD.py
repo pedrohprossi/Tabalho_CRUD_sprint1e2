@@ -160,7 +160,41 @@ def atualizar_crud(id=None):   #Atualiza os ativos, do menu ou na hora da leitur
 #------------------------ATUALIZAR VULNERABILIDADE-----------------------------#
 
 
-def atualizar_vulnerabilidade(id):      #Atualiza as vulnerabilidades, pela opção de atualização ou na hora da leitura
+def atualizar_vulnerabilidade(id=None):      #Atualiza as vulnerabilidades, pela opção de atualização ou na hora da leitura
+
+    if id == None:
+            for k, v in ativos_dicionario.items():
+                print(f'{k} = {v["Nome"]}')
+
+            while True:
+                # Escolha do ativo com tratamento try e except para aceitar id ou nome
+                deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
+
+                try:
+                    id = int(deletar_escolha)
+
+                    if id not in ativos_dicionario:
+                        print('DIGITE UM ID VÁLIDO!')
+                        continue
+                    break
+
+
+                except ValueError:
+
+                    encontrado = False
+
+                    for k, v in ativos_dicionario.items():
+                        if deletar_escolha in v["Nome"].lower():
+                            id = k
+                            encontrado = True
+                            break
+
+                    if not encontrado:
+                        print(f'DIGITE UM NOME VÁLIDO!')
+                        continue
+
+
+
 
     campo_vuln = {                      #Campo de vulnerabilidade de opções para atualização
 1 : "Vulnerabilidade",

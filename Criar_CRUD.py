@@ -97,9 +97,41 @@ def criar_crud():                      #função de criar do CRUD
 
 #------------------------------CRIAR VULNERABILIDADE-------------------------------------#
 
-def adicionar_vulnerabilidade(id):              #Cria vulnerabilidade
+def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
     if id not in vulnerabilidades_dicionario:   #Caso crie a vulnerabilidade direto do menu e o ativo não tenha nenhuma outra
         vulnerabilidades_dicionario[id] = []
+
+
+    if id == None:
+            for k, v in ativos_dicionario.items():
+                print(f'{k} = {v["Nome"]}')
+
+            while True:
+                # Escolha do ativo com tratamento try e except para aceitar id ou nome
+                deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
+
+                try:
+                    id = int(deletar_escolha)
+
+                    if id not in ativos_dicionario:
+                        print('DIGITE UM ID VÁLIDO!')
+                        continue
+                    break
+
+
+                except ValueError:
+
+                    encontrado = False
+
+                    for k, v in ativos_dicionario.items():
+                        if deletar_escolha in v["Nome"].lower():
+                            id = k
+                            encontrado = True
+                            break
+
+                    if not encontrado:
+                        print(f'DIGITE UM NOME VÁLIDO!')
+                        continue
 
 
     while True:
