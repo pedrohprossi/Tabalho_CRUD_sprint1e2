@@ -17,13 +17,13 @@ def deletar_crud():
     while True:
         imprimir_titulo("Deletar Ativo")
 
-        if not ativos_dicionario:
+        if not ativos_dicionario:               #Caso não tenha ativos
             imprimir_aviso("NENHUM ATIVO CADASTRADO NO SISTEMA!")
             return
 
         lista_ativos(ativos_dicionario)
 
-        while True:
+        while True:                             #Mostra ativos e pede escolha
             deletar_escolha = console.input("[bold white]ID ou nome do ativo: [/bold white]").strip().lower()
             try:
                 id = int(deletar_escolha)
@@ -45,7 +45,7 @@ def deletar_crud():
 
         tabela_ativo(ativos_dicionario[id], titulo=f"Ativo #{id} — A ser deletado")
 
-        # Painel de alerta antes da confirmação
+                                                #Painel de alerta antes da confirmação
         painel_confirmacao(f'Tem certeza que deseja deletar o ativo "{ativos_dicionario[id]["Nome"]}"?\nEsta ação removerá também todas as vulnerabilidades associadas.')
 
         confirmacao_deletar = validador_str("Confirme [S/N]: ").upper()
@@ -53,7 +53,6 @@ def deletar_crud():
             imprimir_erro("DIGITE UMA OPÇÃO VÁLIDA!")
             confirmacao_deletar = validador_str("Confirme [S/N]: ").upper()
 
-        # Lógica original de deleção preservada
         if confirmacao_deletar == "S":
             del ativos_dicionario[id]
             if id in vulnerabilidades_dicionario:
@@ -70,15 +69,15 @@ def deletar_crud():
 #  DELETAR VULNERABILIDADE
 # ─────────────────────────────────────────────
 
-def deletar_vulnerabilidade(id=None):
+def deletar_vulnerabilidade(id=None):           #Deletar vulnerabilidade, id=None pq pode ser chamado do menu 
     while True:
         imprimir_titulo("Deletar Vulnerabilidade")
 
-        if not ativos_dicionario:
+        if not ativos_dicionario:               #Caso não tenha ativos
             imprimir_aviso("NENHUM ATIVO CADASTRADO NO SISTEMA!")
             return
 
-        if id is None:
+        if id is None:                          #Mostra ativos e pede escolha
             lista_ativos(ativos_dicionario)
 
             while True:
@@ -101,10 +100,12 @@ def deletar_vulnerabilidade(id=None):
                         continue
                     break
 
+                                                #Caso não tenha vulnerabilidades 
         if id not in vulnerabilidades_dicionario or not vulnerabilidades_dicionario[id]:
             imprimir_aviso("ESTE ATIVO NÃO POSSUI VULNERABILIDADES REGISTRADAS!")
             return
-
+        
+                                                #Opções de apagar todas ou só uma vulnerabilidade
         imprimir_menu("Opções de Remoção", {
             1: "Apagar TODAS as vulnerabilidades do ativo",
             2: "Apagar apenas uma vulnerabilidade",
@@ -114,7 +115,7 @@ def deletar_vulnerabilidade(id=None):
             imprimir_erro("DIGITE UMA OPÇÃO VÁLIDA!")
             escolha_remocao = validador_int("Opção: ")
 
-        if escolha_remocao == 1:
+        if escolha_remocao == 1:                #Deletar todas do ativo
             lista_vulnerabilidades(vulnerabilidades_dicionario[id])
 
             painel_confirmacao("Tem certeza que deseja deletar TODAS as vulnerabilidades acima?")
@@ -131,7 +132,7 @@ def deletar_vulnerabilidade(id=None):
             else:
                 return
 
-        else:
+        else:                                   #Deletar só uma do ativo
             lista_vulnerabilidades(vulnerabilidades_dicionario[id])
 
             while True:

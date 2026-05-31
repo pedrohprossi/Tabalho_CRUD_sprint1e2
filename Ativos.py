@@ -1,5 +1,7 @@
 from enum import Enum
 
+
+#ENUM usado para opções fixas de tipos, severidades e status
 class TipoAtivos(Enum):
     NOTEBOOK = 1
     SERVIDOR = 2
@@ -22,6 +24,8 @@ class TipoStatus(Enum):
     EM_TRATAMENTO = 2
     CORRIGIDA = 3
 
-# Dicionários globais iniciam vazios e serão populados pelo banco de dados
+
+
+# Dicionários globais iniciam vazios 
 ativos_dicionario = {}
 vulnerabilidades_dicionario = {}

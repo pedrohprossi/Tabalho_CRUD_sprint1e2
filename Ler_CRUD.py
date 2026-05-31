@@ -17,13 +17,13 @@ def ler_crud():
     while True:
         imprimir_titulo("Consultar Ativo")
 
-        # Guarda de dicionário vazio — lógica original
+                                #Caso não tenha ativo
         if not ativos_dicionario:
             imprimir_aviso("NENHUM ATIVO CADASTRADO NO SISTEMA!")
             return
 
         lista_ativos(ativos_dicionario)
-
+                                #Mostra ativo e pede escolha
         while True:
             ler_escolha = console.input("[bold white]ID ou nome do ativo: [/bold white]").strip().lower()
             try:
@@ -44,9 +44,10 @@ def ler_crud():
                     continue
                 break
 
-        # Exibição em tabela
+                                #Exibição do ativo
         tabela_ativo(ativos_dicionario[id], titulo=f"Ativo #{id}")
-
+                                
+                                #Opções continuação
         imprimir_continuacao({
             1: "Atualizar ativo",
             2: "Ler vulnerabilidades do ativo",
@@ -74,11 +75,11 @@ def ler_crud():
 #  LER VULNERABILIDADE
 # ─────────────────────────────────────────────
 
-def ler_vulnerabilidade(id=None):
+def ler_vulnerabilidade(id=None):           #Ler vulnerabilidade, id=None pq pode ser chamado do menu ou do Ler do crud
     imprimir_titulo("Consultar Vulnerabilidade")
 
-    if id is None:
-        if not ativos_dicionario:
+    if id is None:                          #Mostra os ativos e pede escolha
+        if not ativos_dicionario:           #Caso nã tenha nenhum ativo
             imprimir_aviso("NENHUM ATIVO CADASTRADO NO SISTEMA!")
             return
 
@@ -104,12 +105,12 @@ def ler_vulnerabilidade(id=None):
                     continue
                 break
 
-    # Guarda sem vulnerabilidades — lógica original
+                                        #Caso não tenha vulnerabilidade registrada
     if id not in vulnerabilidades_dicionario or not vulnerabilidades_dicionario[id]:
         imprimir_aviso("O ATIVO NÃO POSSUI VULNERABILIDADES REGISTRADAS!")
         return
 
-    while True:
+    while True:                         #Mostra as vulnerabilidades e pede escolha
         lista_vulnerabilidades(vulnerabilidades_dicionario[id])
 
         while True:
@@ -134,9 +135,11 @@ def ler_vulnerabilidade(id=None):
 
         vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]
 
-        # Exibição em tabela
+                                            #Exibição da vulnerabilidade
         tabela_vulnerabilidade(vuln_escolhida, titulo=f"Vulnerabilidade #{vn}")
 
+
+                                            #Opção de continuação
         imprimir_continuacao({
             1: "Atualizar vulnerabilidade",
             2: "Ler outra vulnerabilidade do ativo",

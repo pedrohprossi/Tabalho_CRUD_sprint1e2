@@ -10,7 +10,7 @@ import sqlite3
 
 
 # ─────────────────────────────────────────────
-#  GERAÇÃO SEGURA DE ID  (lógica original)
+#  GERAÇÃO SEGURA DE ID 
 # ─────────────────────────────────────────────
 
 def obter_id() -> int:
@@ -35,20 +35,20 @@ def obter_id() -> int:
 #  CRIAR ATIVO
 # ─────────────────────────────────────────────
 
-def criar_crud():
+def criar_crud():                       
     imprimir_titulo("Cadastrar Novo Ativo")
 
     id = obter_id()
     console.print(f"[bold blue]  ID gerado automaticamente: [bold cyan]{id}[/bold cyan][/bold blue]\n")
 
-    # Coleta de dados — lógica original preservada
+                                    #Coleta de informações
     nome        = validador_str("Nome do ativo: ")
     descricao   = validador_str("Descrição: ")
     responsavel = validador_str("Responsável: ")
     setor       = validador_str("Setor: ")
     localizacao = validador_str("Localização: ")
 
-    # Seleção de tipo com tabela visual
+                                    #Seleção de tipo com tabela visual
     lista_enums(TipoAtivos, titulo="Tipos de Ativo")
     while True:
         escolha_tipo = validador_int("Digite o código do tipo: ")
@@ -58,7 +58,7 @@ def criar_crud():
         except ValueError:
             imprimir_erro("TIPO INVÁLIDO — ESCOLHA UM CÓDIGO DA LISTA!")
 
-    # Salva no dicionário — lógica original
+                                    #Salva no dicionário
     ativos_dicionario[id] = {
         "Nome": nome,
         "Descrição": descricao,
@@ -69,11 +69,11 @@ def criar_crud():
     }
     salvar_ativos()
 
-    # Confirmação visual em tabela
+                                    #Confirmação visual em tabela
     imprimir_sucesso("Ativo cadastrado com sucesso!")
     tabela_ativo(ativos_dicionario[id], titulo=f"Ativo #{id} — Salvo")
 
-    # Opções de continuação — estrutura original
+                                    #Opções de continuação
     imprimir_continuacao({1: "Cadastrar vulnerabilidade", 2: "Voltar ao menu"})
     escolha_continuacao = validador_int("Opção: ")
     while escolha_continuacao not in (1, 2):
@@ -92,13 +92,13 @@ def criar_crud():
 #  CRIAR VULNERABILIDADE
 # ─────────────────────────────────────────────
 
-def adicionar_vulnerabilidade(id=None):
+def adicionar_vulnerabilidade(id=None):                     #Criar vulnerabilidade, id=None pq pode ser chamado do menu ou do criar do crud
     imprimir_titulo("Cadastrar Vulnerabilidade")
 
-    if id is None:
+    if id is None:                                          #Mostra ativos e pede escolha
         lista_ativos(ativos_dicionario)
 
-        while True:
+        while True:                                         
             criar_escolha = console.input("[bold white]ID ou nome do ativo: [/bold white]").strip().lower()
             try:
                 id = int(criar_escolha)
@@ -118,11 +118,11 @@ def adicionar_vulnerabilidade(id=None):
                     continue
                 break
 
-    if id not in vulnerabilidades_dicionario:
+    if id not in vulnerabilidades_dicionario:               #Caso o ativo não tenha uma vulnerabilidade cria uma lista vazia
         vulnerabilidades_dicionario[id] = []
 
     while True:
-        # Coleta de dados — lógica original
+                                                            #Coleta de informações
         vulnerabilidade = validador_str("Vulnerabilidade: ")
         risco           = validador_str("Risco (o que pode causar): ")
         categoria       = validador_str("Categoria: ")

@@ -36,7 +36,7 @@ vulnerabilidades_dicionario.update(carregar_vulnerabilidade())
 
 
 # ─────────────────────────────────────────────
-#  MENUS — dicionários para imprimir_menu()
+#  MENUS 
 # ─────────────────────────────────────────────
 
 MENU_PRINCIPAL = {
@@ -54,7 +54,7 @@ MENU_DELETAR  = {1: "Deletar um ativo",     2: "Deletar uma vulnerabilidade"}
 
 
 # ─────────────────────────────────────────────
-#  LOOP PRINCIPAL  (lógica original preservada)
+#  PRINCIPAL (Escolha opção menu)
 # ─────────────────────────────────────────────
 
 while True:

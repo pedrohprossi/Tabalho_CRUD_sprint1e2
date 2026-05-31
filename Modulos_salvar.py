@@ -4,13 +4,13 @@ from Ativos import ativos_dicionario, vulnerabilidades_dicionario, TipoAtivos, T
 DB_NAME = "sistema_seguranca.db"
 
 
-def conectar():
+def conectar():             #Conecta o programa com a base de dados
     conn = sqlite3.connect(DB_NAME)
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
 
-def inicializar_banco():
+def inicializar_banco():    #Inicializa a base de dados
     conn = conectar()
     cursor = conn.cursor()
     cursor.execute('''
@@ -40,7 +40,7 @@ def inicializar_banco():
     conn.close()
 
 
-def salvar_ativos():
+def salvar_ativos():        #Salva os ativos no banco de dados
     conn = conectar()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM ativos")
@@ -53,7 +53,7 @@ def salvar_ativos():
     conn.close()
 
 
-def carregar_ativos():
+def carregar_ativos():      #Carrega os ativos do banco de dados
     conn = conectar()
     cursor = conn.cursor()
     ativos_final = {}
@@ -76,7 +76,7 @@ def carregar_ativos():
     return ativos_final
 
 
-def salvar_vulnerabilidade():
+def salvar_vulnerabilidade():      #Salva as vulnerabilidades no banco de dados
     conn = conectar()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM vulnerabilidades")
@@ -90,7 +90,7 @@ def salvar_vulnerabilidade():
     conn.close()
 
 
-def carregar_vulnerabilidade():
+def carregar_vulnerabilidade():     #Carrega as vulnerabilidades do banco de dados
     conn = conectar()
     cursor = conn.cursor()
     vulnerabilidade_final = {}

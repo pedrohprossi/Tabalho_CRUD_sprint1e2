@@ -1,3 +1,4 @@
+from Modulos_adicionais import lista_vulnerabilidades
 from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, TipoSeveridade, TipoStatus
 from Modulos_salvar import salvar_ativos, salvar_vulnerabilidade
 from Modulos_adicionais import (
@@ -12,10 +13,10 @@ from Modulos_adicionais import (
 #  ATUALIZAR ATIVO
 # ─────────────────────────────────────────────
 
-def atualizar_crud(id=None):
+def atualizar_crud(id=None):    #Atualizar ativo, id=None pq pode ser chamado do menu ou do Ler do crud
     imprimir_titulo("Atualizar Ativo")
 
-    # Campos disponíveis — dicionário original preservado
+                                # Campos disponíveis para atualização
     campo = {
         1: "Nome",
         2: "Descrição",
@@ -26,12 +27,12 @@ def atualizar_crud(id=None):
         7: "Vulnerabilidades",
         8: "Voltar ao menu",
     }
-
+                                #Verifica se tem ativos cadastrados
     if not ativos_dicionario:
         imprimir_aviso("NENHUM ATIVO CADASTRADO NO SISTEMA!")
         return
 
-    if id is None:
+    if id is None:              #Caso a função seja chamada do menu, pede qual ativo deseja atualizar
         lista_ativos(ativos_dicionario)
 
         while True:
@@ -56,7 +57,7 @@ def atualizar_crud(id=None):
 
     tabela_ativo(ativos_dicionario[id], titulo=f"Ativo #{id} — Estado Atual")
 
-    while True:
+    while True:                 #Pede o campo para a atualização
         imprimir_menu("Campos para Atualização", campo)
 
         escolha_campo = validador_int("Campo que deseja alterar: ")
@@ -64,7 +65,7 @@ def atualizar_crud(id=None):
             imprimir_erro("DIGITE UMA OPÇÃO VÁLIDA!")
             escolha_campo = validador_int("Campo que deseja alterar: ")
 
-        # Lógica original de cada campo preservada
+                    
         if escolha_campo == 1:
             ativos_dicionario[id][campo[escolha_campo]] = validador_str("Novo nome: ")
 
@@ -100,6 +101,7 @@ def atualizar_crud(id=None):
         salvar_ativos()
         imprimir_sucesso("Ativo atualizado com sucesso!")
 
+                                    #Opções de continuação
         imprimir_continuacao({
             1: "Atualizar outra informação do ativo",
             2: "Atualizar vulnerabilidades do ativo",
@@ -122,17 +124,17 @@ def atualizar_crud(id=None):
 #  ATUALIZAR VULNERABILIDADE
 # ─────────────────────────────────────────────
 
-def atualizar_vulnerabilidade(id=None):
+def atualizar_vulnerabilidade(id=None):         #Atualizar a vulnerabilidade, id=None pq pode ser chamado do menu ou do Ler vulnerabilidade do crud          
     imprimir_titulo("Atualizar Vulnerabilidade")
 
-    if not ativos_dicionario:
+    if not ativos_dicionario:                   #Caso não tenha ativos
         imprimir_aviso("NENHUM ATIVO CADASTRADO NO SISTEMA!")
         return
 
-    if id is None:
+    if id is None:                              #Caso seja chamado do menu, mostra o ativo e pede escolha
         lista_ativos(ativos_dicionario)
 
-        while True:
+        while True:    
             atualizar_crud_escolha = console.input("[bold white]ID ou nome do ativo: [/bold white]").strip().lower()
             try:
                 id = int(atualizar_crud_escolha)
@@ -156,7 +158,8 @@ def atualizar_vulnerabilidade(id=None):
         imprimir_aviso("ESTE ATIVO NÃO POSSUI VULNERABILIDADES REGISTRADAS!")
         return
 
-    campo_vuln = {
+                            #Campo de vulnerabilidades
+    campo_vuln = {                  
         1: "Vulnerabilidade",
         2: "Risco",
         3: "Categoria",
@@ -166,8 +169,8 @@ def atualizar_vulnerabilidade(id=None):
     }
 
     while True:
-        # Lista de vulnerabilidades numerada
-        from Modulos_adicionais import lista_vulnerabilidades
+                     #Lista de vulnerabilidades  e pede a escolha depois
+
         lista_vulnerabilidades(vulnerabilidades_dicionario[id])
 
         escolha_vuln = validador_int("Número da vulnerabilidade a alterar: ")
@@ -179,6 +182,7 @@ def atualizar_vulnerabilidade(id=None):
 
         imprimir_menu("Campos para Atualização", campo_vuln)
 
+                        #Escolha do campo e atualização
         escolha_campo_vuln = validador_int("Campo que deseja alterar: ")
         while escolha_campo_vuln not in range(1, 7):
             imprimir_erro("DIGITE UMA OPÇÃO VÁLIDA!")
@@ -222,6 +226,7 @@ def atualizar_vulnerabilidade(id=None):
         salvar_vulnerabilidade()
         imprimir_sucesso("Vulnerabilidade atualizada com sucesso!")
 
+                #Opções de continuação
         imprimir_continuacao({1: "Atualizar outra vulnerabilidade", 2: "Voltar ao menu"})
         escolha_continuacao = validador_int("Opção: ")
         while escolha_continuacao not in (1, 2):
