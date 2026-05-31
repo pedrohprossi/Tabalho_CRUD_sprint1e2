@@ -1,218 +1,176 @@
 from Ativos import ativos_dicionario, vulnerabilidades_dicionario
 from Modulos_salvar import salvar_ativos, salvar_vulnerabilidade
-from Modulos_adicionais import validador_int, validador_str
+from Modulos_adicionais import (
+    validador_int, validador_str, console,
+    imprimir_titulo, imprimir_sucesso, imprimir_erro, imprimir_aviso,
+    imprimir_menu, imprimir_continuacao,
+    tabela_ativo, tabela_vulnerabilidade,
+    lista_ativos, lista_vulnerabilidades, painel_confirmacao
+)
 
 
-#--------------DELETAR ATIVOS-----------------#
+# ─────────────────────────────────────────────
+#  DELETAR ATIVO
+# ─────────────────────────────────────────────
 
 def deletar_crud():
-
     while True:
+        imprimir_titulo("Deletar Ativo")
 
         if not ativos_dicionario:
-            print('NENHUM ATIVO CADASTRADO NO SISTEMA!')
+            imprimir_aviso("NENHUM ATIVO CADASTRADO NO SISTEMA!")
             return
-        
 
-        for k, v in ativos_dicionario.items():
-            print(f'{k} = {v["Nome"]}')
+        lista_ativos(ativos_dicionario)
 
         while True:
-            # Escolha do ativo com tratamento try e except para aceitar id ou nome
-            deletar_escolha = input('Digite o ativo que deseja deletar: ').strip().lower()
-
+            deletar_escolha = console.input("[bold white]ID ou nome do ativo: [/bold white]").strip().lower()
             try:
                 id = int(deletar_escolha)
-
                 if id not in ativos_dicionario:
-                    print('DIGITE UM ID VÁLIDO!')
+                    imprimir_erro("DIGITE UM ID VÁLIDO!")
                     continue
                 break
-
-
             except ValueError:
-
                 encontrado = False
-
                 for k, v in ativos_dicionario.items():
                     if deletar_escolha in v["Nome"].lower():
                         id = k
                         encontrado = True
                         break
-
                 if not encontrado:
-                    print(f'DIGITE UM NOME VÁLIDO!')
+                    imprimir_erro("DIGITE UM NOME VÁLIDO!")
                     continue
                 break
 
+        tabela_ativo(ativos_dicionario[id], titulo=f"Ativo #{id} — A ser deletado")
 
+        # Painel de alerta antes da confirmação
+        painel_confirmacao(f'Tem certeza que deseja deletar o ativo "{ativos_dicionario[id]["Nome"]}"?\nEsta ação removerá também todas as vulnerabilidades associadas.')
 
+        confirmacao_deletar = validador_str("Confirme [S/N]: ").upper()
+        while confirmacao_deletar not in ("S", "N"):
+            imprimir_erro("DIGITE UMA OPÇÃO VÁLIDA!")
+            confirmacao_deletar = validador_str("Confirme [S/N]: ").upper()
 
-        print('Ativo escolhido:')
-        for k, v in ativos_dicionario[id].items():  # Mostra o ativo
-            if k == 'Tipo':
-                print(f'{k} = {v.name.lower().capitalize()}')
-            else:
-                print(f'{k} = {v}')
-
-
-        confirmacao_deletar = validador_str(f'Tem certeza que deseja deletar o ativo {ativos_dicionario[id]["Nome"]}? [S/N]').upper()
-        while confirmacao_deletar not in ('S','N'):
-            print('DIGITE UMA OPÇÃO VÁLIDA!')
-            confirmacao_deletar = validador_str(f'Tem certeza que deseja deletar o ativo {ativos_dicionario[id]["Nome"]}? [S/N]').upper()
-
-
-        if confirmacao_deletar == 'S':
+        # Lógica original de deleção preservada
+        if confirmacao_deletar == "S":
             del ativos_dicionario[id]
             if id in vulnerabilidades_dicionario:
                 del vulnerabilidades_dicionario[id]
-            print('ATIVO DELETADO COM SUCESSO!')
             salvar_ativos()
             salvar_vulnerabilidade()
+            imprimir_sucesso("ATIVO DELETADO COM SUCESSO!")
             return
-
         else:
             return
 
 
-
-
-
-#--------------DELETAR VULNERABILIDADES-----------------#
+# ─────────────────────────────────────────────
+#  DELETAR VULNERABILIDADE
+# ─────────────────────────────────────────────
 
 def deletar_vulnerabilidade(id=None):
-
     while True:
+        imprimir_titulo("Deletar Vulnerabilidade")
 
         if not ativos_dicionario:
-            print('NENHUM ATIVO CADASTRADO NO SISTEMA!')
+            imprimir_aviso("NENHUM ATIVO CADASTRADO NO SISTEMA!")
             return
-        
 
         if id is None:
-            for k, v in ativos_dicionario.items():
-                print(f'{k} = {v["Nome"]}')
+            lista_ativos(ativos_dicionario)
 
             while True:
-                # Escolha do ativo com tratamento try e except para aceitar id ou nome
-                deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
-
+                deletar_escolha = console.input("[bold white]ID ou nome do ativo: [/bold white]").strip().lower()
                 try:
                     id = int(deletar_escolha)
-
                     if id not in ativos_dicionario:
-                        print('DIGITE UM ID VÁLIDO!')
+                        imprimir_erro("DIGITE UM ID VÁLIDO!")
                         continue
                     break
-
-
                 except ValueError:
-
                     encontrado = False
-
                     for k, v in ativos_dicionario.items():
                         if deletar_escolha in v["Nome"].lower():
                             id = k
                             encontrado = True
                             break
-
                     if not encontrado:
-                        print(f'DIGITE UM NOME VÁLIDO!')
+                        imprimir_erro("DIGITE UM NOME VÁLIDO!")
                         continue
                     break
 
-
-
         if id not in vulnerabilidades_dicionario or not vulnerabilidades_dicionario[id]:
-            print('ESTE ATIVO NÃO POSSUI VULNERABILIDADES REGISTRADAS!')
+            imprimir_aviso("ESTE ATIVO NÃO POSSUI VULNERABILIDADES REGISTRADAS!")
             return
 
-        
-        print('''Opções de remoção:
-        [1] Apagar todas as vulnerabilidades do ativo
-        [2] Apagar apenas uma vulnerabilidade do ativo    
-        ''')
-        escolha_remocao = validador_int('Digite a opção de remoção que deseja realizar: ')
+        imprimir_menu("Opções de Remoção", {
+            1: "Apagar TODAS as vulnerabilidades do ativo",
+            2: "Apagar apenas uma vulnerabilidade",
+        })
+        escolha_remocao = validador_int("Opção: ")
         while escolha_remocao not in (1, 2):
-            print('DIGITE UMA OPÇÃO VÁLIDA!')
-            escolha_remocao = validador_int('Digite a opção de remoção que deseja realizar: ')
+            imprimir_erro("DIGITE UMA OPÇÃO VÁLIDA!")
+            escolha_remocao = validador_int("Opção: ")
 
         if escolha_remocao == 1:
+            lista_vulnerabilidades(vulnerabilidades_dicionario[id])
 
-            print('Vulnerabilidades escolhidas: ')
-            for i, vuln in enumerate(vulnerabilidades_dicionario[id], start=1):
-                print(f'{i} = {vuln["Vulnerabilidade"]}')
+            painel_confirmacao("Tem certeza que deseja deletar TODAS as vulnerabilidades acima?")
+            confirmacao_deletar_tudo = validador_str("Confirme [S/N]: ").upper()
+            while confirmacao_deletar_tudo not in ("S", "N"):
+                imprimir_erro("DIGITE UMA OPÇÃO VÁLIDA!")
+                confirmacao_deletar_tudo = validador_str("Confirme [S/N]: ").upper()
 
-
-            confirmacao_deletar_tudo = validador_str(f'Tem certeza que deseja deletar TODAS as vulnerabilidades acima? [S/N]').upper()
-            while confirmacao_deletar_tudo not in ('S', 'N'):
-                print('DIGITE UMA OPÇÃO VÁLIDA!')
-                confirmacao_deletar_tudo = validador_str(f'Tem certeza que deseja deletar TODAS as vulnerabilidades acima? [S/N]').upper()
-
-            if confirmacao_deletar_tudo == 'S':
+            if confirmacao_deletar_tudo == "S":
                 del vulnerabilidades_dicionario[id]
                 salvar_vulnerabilidade()
-                print('VULNERABILIDADE DELETADA COM SUCESSO!')
+                imprimir_sucesso("TODAS AS VULNERABILIDADES DELETADAS COM SUCESSO!")
                 return
-
             else:
                 return
 
-
-
-
         else:
-            
-            for i, vuln in enumerate(vulnerabilidades_dicionario[id], start=1):
-                print(f'{i} = {vuln["Vulnerabilidade"]}')
-
+            lista_vulnerabilidades(vulnerabilidades_dicionario[id])
 
             while True:
-
-                # Escolha da vulnerabilidade, funciona colocando a opção ou a vulnerabilidade
-                deletar_escolha_vulnerabilidade = input('Escolha a vulnerabilidade que deseja deletar: ').lower().strip()
+                deletar_escolha_vulnerabilidade = console.input(
+                    "[bold white]Número ou nome da vulnerabilidade: [/bold white]"
+                ).lower().strip()
 
                 try:
                     vn = int(deletar_escolha_vulnerabilidade)
                     if vn < 1 or vn > len(vulnerabilidades_dicionario[id]):
-                            print('DIGITE UM ID VÁLIDO!')
-                            continue
+                        imprimir_erro("DIGITE UM NÚMERO VÁLIDO!")
+                        continue
                     break
-
                 except ValueError:
                     encontrado = False
-
                     for k, v in enumerate(vulnerabilidades_dicionario[id], start=1):
                         if deletar_escolha_vulnerabilidade in v["Vulnerabilidade"].lower():
                             vn = k
                             encontrado = True
                             break
-
                     if not encontrado:
-                        print(f'DIGITE UMA VULNERABILIDADE VÁLIDA!')
+                        imprimir_erro("DIGITE UMA VULNERABILIDADE VÁLIDA!")
                         continue
                     break
 
+            vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]
 
-            vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]  # Diminui um para compatilidade com a lista
+            tabela_vulnerabilidade(vuln_escolhida, titulo="Vulnerabilidade a ser deletada")
+            painel_confirmacao(f'Tem certeza que deseja deletar "{vuln_escolhida["Vulnerabilidade"]}"?')
 
-            print('Vulnerabilidade escolhida:')
-            for k, v in vuln_escolhida.items():  # Mostra a vulnerabilidade
-                if k == 'Severidade' or k == 'Status':
-                    print(f'{k} = {v.name.lower().capitalize()}')
-                else:
-                    print(f'{k} = {v}')
+            confirmacao_deletar = validador_str("Confirme [S/N]: ").upper()
+            while confirmacao_deletar not in ("S", "N"):
+                imprimir_erro("DIGITE UMA OPÇÃO VÁLIDA!")
+                confirmacao_deletar = validador_str("Confirme [S/N]: ").upper()
 
-            confirmacao_deletar = validador_str(f'Tem certeza que deseja deletar a vulnerabilidade {vuln_escolhida["Vulnerabilidade"]}? [S/N]').upper()
-            while confirmacao_deletar not in ('S', 'N'):
-                print('DIGITE UMA OPÇÃO VÁLIDA!')
-                confirmacao_deletar = validador_str(f'Tem certeza que deseja deletar a vulnerabilidade {vuln_escolhida["Vulnerabilidade"]}? [S/N]').upper()
-
-            if confirmacao_deletar == 'S':
-                    vulnerabilidades_dicionario[id].pop(vn-1)
-                    salvar_vulnerabilidade()
-                    print('VULNERABILIDADE DELETADA COM SUCESSO!')
-                    return
-
+            if confirmacao_deletar == "S":
+                vulnerabilidades_dicionario[id].pop(vn - 1)
+                salvar_vulnerabilidade()
+                imprimir_sucesso("VULNERABILIDADE DELETADA COM SUCESSO!")
+                return
             else:
                 return
