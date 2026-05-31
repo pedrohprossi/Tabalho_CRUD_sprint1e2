@@ -162,7 +162,7 @@ def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
 
 
                     if not encontrado:
-                        print(f'DIGITE UM VULNERABILIDADE VÁLIDA!')
+                        print(f'DIGITE UMA VULNERABILIDADE VÁLIDA!')
                         continue   
                     break 
 

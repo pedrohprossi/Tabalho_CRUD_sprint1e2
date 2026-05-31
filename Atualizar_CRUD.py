@@ -195,7 +195,9 @@ def atualizar_vulnerabilidade(id=None):      #Atualiza as vulnerabilidades, pela
                         continue
                     break
 
-
+    if id not in vulnerabilidades_dicionario or not vulnerabilidades_dicionario[id]:
+        print('ESTE ATIVO NÃO POSSUI VULNERABILIDADES REGISTRADAS!')
+        return
 
     campo_vuln = {                      #Campo de vulnerabilidade de opções para atualização
 1 : "Vulnerabilidade",
