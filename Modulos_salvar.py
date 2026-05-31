@@ -1,85 +1,152 @@
-import json
+import sqlite3
 from Ativos import ativos_dicionario, vulnerabilidades_dicionario, TipoAtivos, TipoSeveridade, TipoStatus
 
 
-def salvar_ativos():  # Salva os ativos em JSON
-    ativos_temporario = {}
-    ativos_copia = {}
+
+DB_NAME = "sistema_seguranca.db"
 
 
-    for k, v in ativos_dicionario.items():  # Transformar Enum em string para o JSON ler
-        ativos_copia = v.copy()
-        ativos_copia["Tipo"] = ativos_copia["Tipo"].value
-        ativos_temporario[k] = ativos_copia
 
-
-    with open("ativos.json", "w", encoding="utf-8") as f:
-        json.dump(ativos_temporario, f, indent=4, ensure_ascii=False)
+def conectar():
+    conn = sqlite3.connect(DB_NAME)
+    conn.execute("PRAGMA foreign_keys = ON;")
+    return conn
 
 
 
 
-def carregar_ativos():  # Le os ativo do arquivo JSON
+def inicializar_banco():
+                        #Cria as tabelas se elas não existirem no início do programa
+
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS ativos (
+            id INTEGER PRIMARY KEY,
+            nome TEXT,
+            descricao TEXT,
+            responsavel TEXT,
+            setor TEXT,
+            localizacao TEXT,
+            tipo INTEGER
+        )
+    ''')
+
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS vulnerabilidades (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ativo_id INTEGER,
+            vulnerabilidade TEXT,
+            risco TEXT,
+            categoria TEXT,
+            severidade INTEGER,
+            status INTEGER,
+            FOREIGN KEY (ativo_id) REFERENCES ativos (id) ON DELETE CASCADE
+        )
+    ''')
+
+
+    conn.commit()
+    conn.close()
+
+
+
+
+
+def salvar_ativos():
+                        #Le o  dicionário de ativos e sincroniza com o banco de dados
+    conn = conectar()
+    cursor = conn.cursor()
+
+    
+                        #Limpa a tabela para reinscrever o dicionário atualizado
+    cursor.execute("DELETE FROM ativos")
+    
+
+    for k, v in ativos_dicionario.items():
+        cursor.execute('''
+            INSERT INTO ativos (id, nome, descricao, responsavel, setor, localizacao, tipo)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (k, v["Nome"], v["Descrição"], v["Responsável"], v["Setor"], v["Localização"], v["Tipo"].value))
+        
+
+    conn.commit()
+    conn.close()
+
+
+
+
+
+def carregar_ativos():
+                    #Busca do banco e monta o dicionário
+    conn = conectar()
+    cursor = conn.cursor()
     ativos_final = {}
-    ativos_copia = {}
 
+    try:
+        cursor.execute("SELECT id, nome, descricao, responsavel, setor, localizacao, tipo FROM ativos")
+        for linha in cursor.fetchall():
+            ativos_final[linha[0]] = {
+                "Nome": linha[1],
+                "Descrição": linha[2],
+                "Responsável": linha[3],
+                "Setor": linha[4],
+                "Localização": linha[5],
+                "Tipo": TipoAtivos(linha[6])
+            }
 
-    try:  # Tratamento de erro e criar / escrever no arquivo
-        with open("ativos.json", "r", encoding="utf-8") as f:
-            ativos_json = json.load(f)
-    except FileNotFoundError:
-        return {}
-
-
-    for k, v in ativos_json.items():  # Transforma string de volta em Enum pro python
-        ativos_copia = v.copy()
-        ativos_copia["Tipo"] = TipoAtivos(v["Tipo"])
-        ativos_final[int(k)] = ativos_copia
-
-    return ativos_final  # Retorna os ativos em Enum
-
-
-
-
-def salvar_vulnerabilidade():  #Salva as vulnerabilidades em JSON
-    vulnerabilidade_temporaria = {}
-    vulnerabilidade_copia = {}
-
-
-    for k, lista in vulnerabilidades_dicionario.items():       # Transformar Enum em string para o JSON ler
-        lista_conv_enum = []
-        for vuln in lista:
-            vulnerabilidade_copia = vuln.copy()
-            vulnerabilidade_copia["Severidade"] = vulnerabilidade_copia["Severidade"].value
-            vulnerabilidade_copia["Status"] = vulnerabilidade_copia["Status"].value
-            lista_conv_enum.append(vulnerabilidade_copia)
-        vulnerabilidade_temporaria[k] = lista_conv_enum
-
-
-    with open("vulnerabilidades.json", "w", encoding="utf-8") as f:
-        json.dump(vulnerabilidade_temporaria, f, indent=4, ensure_ascii=False)
+    except sqlite3.OperationalError:
+        pass
+    conn.close()
+    return ativos_final
 
 
 
 
-def carregar_vulnerabilidade():       #Le as vulnerabilidades do arquivo JSON
+def salvar_vulnerabilidade():
+                            #Le o dicionário de vulnerabilidades e sincroniza com o banco
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM vulnerabilidades")
+    
+
+    for ativo_id, lista_vulns in vulnerabilidades_dicionario.items():
+        for v in lista_vulns:
+            cursor.execute('''
+                INSERT INTO vulnerabilidades (ativo_id, vulnerabilidade, risco, categoria, severidade, status)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (ativo_id, v["Vulnerabilidade"], v["Risco"], v["Categoria"], v["Severidade"].value, v["Status"].value))
+            
+
+    conn.commit()
+    conn.close()
+
+
+
+
+def carregar_vulnerabilidade():
+                            #Busca do banco e remonta a estrutura de listas dentro do dicionário
+    conn = conectar()
+    cursor = conn.cursor()
     vulnerabilidade_final = {}
-    vulnerabilidade_copia = {}
 
+    try:
+        cursor.execute("SELECT ativo_id, vulnerabilidade, risco, categoria, severidade, status FROM vulnerabilidades")
+        for linha in cursor.fetchall():
+            ativo_id = linha[0]
+            if ativo_id not in vulnerabilidade_final:
+                vulnerabilidade_final[ativo_id] = []
+                
+            vulnerabilidade_final[ativo_id].append({
+                "Vulnerabilidade": linha[1],
+                "Risco": linha[2],
+                "Categoria": linha[3],
+                "Severidade": TipoSeveridade(linha[4]),
+                "Status": TipoStatus(linha[5])
+            })
 
-    try:  # Tratamento de erro e criar / escrever no arquivo
-        with open("vulnerabilidades.json", "r", encoding="utf-8") as f:
-            vulnerabilidades_json = json.load(f)
-    except FileNotFoundError:
-        return {}
-
-    for k, lista in vulnerabilidades_json.items():  # Transformar Enum em string para o JSON ler
-        lista_conv_enum = []
-        for vuln in lista:
-            vulnerabilidade_copia = vuln.copy()
-            vulnerabilidade_copia["Severidade"] = TipoSeveridade(vulnerabilidade_copia["Severidade"])
-            vulnerabilidade_copia["Status"] = TipoStatus(vulnerabilidade_copia["Status"])
-            lista_conv_enum.append(vulnerabilidade_copia)
-        vulnerabilidade_final[int(k)] = lista_conv_enum
-
-    return vulnerabilidade_final     # Retorna as vulnerabilidades em Enum
+    except sqlite3.OperationalError:
+        pass
+    conn.close()
+    return vulnerabilidade_final
