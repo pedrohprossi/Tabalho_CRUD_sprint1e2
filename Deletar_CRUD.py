@@ -9,6 +9,11 @@ def deletar_crud():
 
     while True:
 
+        if not ativos_dicionario:
+            print('NENHUM ATIVO CADASTRADO NO SISTEMA!')
+            return
+        
+
         for k, v in ativos_dicionario.items():
             print(f'{k} = {v["Nome"]}')
 
@@ -63,6 +68,7 @@ def deletar_crud():
                 del vulnerabilidades_dicionario[id]
             print('ATIVO DELETADO COM SUCESSO!')
             salvar_ativos()
+            salvar_vulnerabilidade()
             return
 
         else:
@@ -77,6 +83,12 @@ def deletar_crud():
 def deletar_vulnerabilidade(id=None):
 
     while True:
+
+        if not ativos_dicionario:
+            print('NENHUM ATIVO CADASTRADO NO SISTEMA!')
+            return
+        
+
         if id is None:
             for k, v in ativos_dicionario.items():
                 print(f'{k} = {v["Nome"]}')

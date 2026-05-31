@@ -13,6 +13,11 @@ def ler_crud():    #Le os ativos
 
     while True:
 
+        if not ativos_dicionario:
+            print('NENHUM ATIVO CADASTRADO NO SISTEMA!')
+            return
+        
+
         for k, v in ativos_dicionario.items():              #Mostra os ativos para escolha
             print(f'[{k}] - {v["Nome"].lower().capitalize()}')
 
@@ -95,6 +100,10 @@ def ler_crud():    #Le os ativos
 def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
 
     if id is None:
+            if not ativos_dicionario:
+                print('NENHUM ATIVO CADASTRADO NO SISTEMA!')
+                return
+
             for k, v in ativos_dicionario.items():
                 print(f'{k} = {v["Nome"]}')
 

@@ -96,8 +96,8 @@ def carregar_ativos():
                 "Tipo": TipoAtivos(linha[6])
             }
 
-    except sqlite3.OperationalError:
-        pass
+    except sqlite3.OperationalError as e:
+        print(f'AVISO: Erro ao carregar dados do banco: {e}')
     conn.close()
     return ativos_final
 
@@ -146,7 +146,7 @@ def carregar_vulnerabilidade():
                 "Status": TipoStatus(linha[5])
             })
 
-    except sqlite3.OperationalError:
-        pass
+    except sqlite3.OperationalError as e:
+        print(f'AVISO: Erro ao carregar dados do banco: {e}')
     conn.close()
     return vulnerabilidade_final

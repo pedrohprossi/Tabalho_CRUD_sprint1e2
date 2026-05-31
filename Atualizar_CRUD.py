@@ -21,7 +21,10 @@ def atualizar_crud(id=None):   #Atualiza os ativos, do menu ou na hora da leitur
 8 : "Voltar ao menu"
 }
     
-    
+    if not ativos_dicionario:
+            print('NENHUM ATIVO CADASTRADO NO SISTEMA!')
+            return
+            
     if id is None:          #Coloquei id is None, para caso o usuario tenha escolhido direto do menu a opção atualização (Esse if escolhe o id do ativo)
         for k, v in ativos_dicionario.items():
                 print(f'[{k}] - {v["Nome"].lower().capitalize()}')
@@ -163,6 +166,12 @@ def atualizar_crud(id=None):   #Atualiza os ativos, do menu ou na hora da leitur
 
 def atualizar_vulnerabilidade(id=None):      #Atualiza as vulnerabilidades, pela opção de atualização ou na hora da leitura
 
+
+    if not ativos_dicionario:
+            print('NENHUM ATIVO CADASTRADO NO SISTEMA!')
+            return
+    
+    
     if id is None:
             for k, v in ativos_dicionario.items():
                 print(f'{k} = {v["Nome"]}')

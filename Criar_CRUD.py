@@ -5,18 +5,35 @@ from Modulos_adicionais import validador_int, validador_str
 
 
 
-#------------------------------CRIAR CRUD-------------------------------------#
+#---------------------FUNÇÃO PARA VERIFICAÇÃO DE ID---------------------------#
 
+def obter_id() -> int:
+                        #Gera o id do ativo, se não existir nenhum ativo o id = 1
+    import sqlite3
+    from Modulos_salvar import DB_NAME, conectar
+
+    id_memoria = max(ativos_dicionario.keys()) + 1 if ativos_dicionario else 1
+
+    try:
+        conn = conectar()
+        cursor = conn.cursor()
+        cursor.execute("SELECT MAX(id) FROM ativos")
+        resultado = cursor.fetchone()
+        conn.close()
+        id_banco = (resultado[0] or 0) + 1
+    except sqlite3.OperationalError:
+        id_banco = 1
+
+    return max(id_memoria, id_banco)
+
+
+
+#------------------------------CRIAR CRUD-------------------------------------#
 
 
 def criar_crud():                      #função de criar do CRUD
 
-    if ativos_dicionario:           #Gera o id do ativo, se não existir nenhum ativo o id = 1
-        id = max(ativos_dicionario.keys()) + 1
-    else:
-        id = 1
-
-
+    id = obter_id()
     print(f'O ID gerado foi {id}')  #Mostra o id gerado
 
 
