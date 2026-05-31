@@ -223,7 +223,7 @@ def atualizar_vulnerabilidade(id=None):      #Atualiza as vulnerabilidades, pela
             print(f'[{k}] {v}')
 
         escolha_campo_vuln = validador_int('Digite o campo que deseje alterar: ')   # #Escolhe o que vai alterar e as condições é onde muda
-        while escolha_campo_vuln not in range(1, 8):
+        while escolha_campo_vuln not in range(1, 7):
             print('DIGITE UMA OPÇÃO VÁLIDA!')
             escolha_campo_vuln = validador_int('Digite o campo que deseje alterar: ')
 

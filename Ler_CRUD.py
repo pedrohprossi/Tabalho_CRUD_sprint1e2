@@ -124,6 +124,7 @@ def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
+                    break
 
 
 

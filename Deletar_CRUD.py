@@ -14,7 +14,7 @@ def deletar_crud():
 
         while True:
             # Escolha do ativo com tratamento try e except para aceitar id ou nome
-            deletar_escolha = input('Digite o ativo deseja deletar: ').strip().lower()
+            deletar_escolha = input('Digite o ativo que deseja deletar: ').strip().lower()
 
             try:
                 id = int(deletar_escolha)
@@ -61,8 +61,9 @@ def deletar_crud():
             del ativos_dicionario[id]
             if id in vulnerabilidades_dicionario:
                 del vulnerabilidades_dicionario[id]
-
+            print('ATIVO DELETADO COM SUCESSO!')
             salvar_ativos()
+            return
 
         else:
             return
@@ -106,10 +107,15 @@ def deletar_vulnerabilidade(id=None):
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
-                        break
+                    break
 
 
 
+        if id not in vulnerabilidades_dicionario or not vulnerabilidades_dicionario[id]:
+            print('ESTE ATIVO NÃO POSSUI VULNERABILIDADES REGISTRADAS!')
+            return
+
+        
         print('''Opções de remoção:
         [1] Apagar todas as vulnerabilidades do ativo
         [2] Apagar apenas uma vulnerabilidade do ativo    
@@ -134,6 +140,8 @@ def deletar_vulnerabilidade(id=None):
             if confirmacao_deletar_tudo == 'S':
                 del vulnerabilidades_dicionario[id]
                 salvar_vulnerabilidade()
+                print('VULNERABILIDADE DELETADA COM SUCESSO!')
+                return
 
             else:
                 return
@@ -142,6 +150,7 @@ def deletar_vulnerabilidade(id=None):
 
 
         else:
+            
             for i, vuln in enumerate(vulnerabilidades_dicionario[id], start=1):
                 print(f'{i} = {vuln["Vulnerabilidade"]}')
 
@@ -190,6 +199,8 @@ def deletar_vulnerabilidade(id=None):
             if confirmacao_deletar == 'S':
                     vulnerabilidades_dicionario[id].pop(vn-1)
                     salvar_vulnerabilidade()
+                    print('VULNERABILIDADE DELETADA COM SUCESSO!')
+                    return
 
             else:
                 return
