@@ -1,5 +1,5 @@
-from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, TipoSeveridade, TipoStatus
-from Modulos_salvar import salvar_ativos, carregar_ativos, salvar_vulnerabilidade, carregar_vulnerabilidade
+from Ativos import ativos_dicionario, vulnerabilidades_dicionario
+from Modulos_salvar import salvar_ativos, salvar_vulnerabilidade
 from Modulos_adicionais import validador_int, validador_str
 
 
@@ -38,6 +38,7 @@ def deletar_crud():
                 if not encontrado:
                     print(f'DIGITE UM NOME VÁLIDO!')
                     continue
+                break
 
 
 
@@ -75,7 +76,7 @@ def deletar_crud():
 def deletar_vulnerabilidade(id=None):
 
     while True:
-        if id == None:
+        if id is None:
             for k, v in ativos_dicionario.items():
                 print(f'{k} = {v["Nome"]}')
 
@@ -105,6 +106,7 @@ def deletar_vulnerabilidade(id=None):
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
+                        break
 
 
 
@@ -168,6 +170,7 @@ def deletar_vulnerabilidade(id=None):
                     if not encontrado:
                         print(f'DIGITE UMA VULNERABILIDADE VÁLIDA!')
                         continue
+                    break
 
 
             vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]  # Diminui um para compatilidade com a lista

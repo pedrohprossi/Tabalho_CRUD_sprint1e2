@@ -1,5 +1,5 @@
 from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, TipoSeveridade, TipoStatus
-from Modulos_salvar import salvar_ativos, carregar_ativos, salvar_vulnerabilidade, carregar_vulnerabilidade
+from Modulos_salvar import salvar_ativos, salvar_vulnerabilidade
 from Modulos_adicionais import validador_int, validador_str
 
 
@@ -28,7 +28,7 @@ def atualizar_crud(id=None):   #Atualiza os ativos, do menu ou na hora da leitur
 
         while True:
 
-            ler_escolha = input('Digite o ativo deseja visualizar: ').strip().lower()
+            ler_escolha = input('Digite o ativo que deseja visualizar: ').strip().lower()
 
             try:
                 id = int(ler_escolha)
@@ -53,6 +53,7 @@ def atualizar_crud(id=None):   #Atualiza os ativos, do menu ou na hora da leitur
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
+                    break
 
 
     for k, v in ativos_dicionario[id].items():    #Mostra o ativo escolhido
@@ -162,16 +163,16 @@ def atualizar_crud(id=None):   #Atualiza os ativos, do menu ou na hora da leitur
 
 def atualizar_vulnerabilidade(id=None):      #Atualiza as vulnerabilidades, pela opção de atualização ou na hora da leitura
 
-    if id == None:
+    if id is None:
             for k, v in ativos_dicionario.items():
                 print(f'{k} = {v["Nome"]}')
 
             while True:
                 # Escolha do ativo com tratamento try e except para aceitar id ou nome
-                deletar_escolha = input('Digite o ativo que deseja deletar a vulnerabilidade: ').strip().lower()
+                atualizar_crud_escolha = input('Digite o ativo que deseja atualizar a vulnerabilidade: ').strip().lower()
 
                 try:
-                    id = int(deletar_escolha)
+                    id = int(atualizar_crud_escolha)
 
                     if id not in ativos_dicionario:
                         print('DIGITE UM ID VÁLIDO!')
@@ -184,7 +185,7 @@ def atualizar_vulnerabilidade(id=None):      #Atualiza as vulnerabilidades, pela
                     encontrado = False
 
                     for k, v in ativos_dicionario.items():
-                        if deletar_escolha in v["Nome"].lower():
+                        if atualizar_crud_escolha in v["Nome"].lower():
                             id = k
                             encontrado = True
                             break
@@ -192,7 +193,7 @@ def atualizar_vulnerabilidade(id=None):      #Atualiza as vulnerabilidades, pela
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
-
+                    break
 
 
 

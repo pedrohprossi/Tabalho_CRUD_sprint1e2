@@ -28,3 +28,6 @@ def validador_int(num):       #validador string + validador de inteiro
             return int(num_str)
         except ValueError:
             print(f'DIGITE UM NÚMERO INTEIRO!')
+
+
+

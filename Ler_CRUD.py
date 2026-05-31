@@ -1,7 +1,5 @@
-from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, TipoSeveridade, TipoStatus
-from Modulos_salvar import salvar_ativos, carregar_ativos, salvar_vulnerabilidade, carregar_vulnerabilidade
-from Modulos_adicionais import validador_int, validador_str
-from Criar_CRUD import adicionar_vulnerabilidade
+from Ativos import ativos_dicionario, vulnerabilidades_dicionario
+from Modulos_adicionais import validador_int
 from Atualizar_CRUD import atualizar_crud, atualizar_vulnerabilidade
 
 
@@ -20,7 +18,7 @@ def ler_crud():    #Le os ativos
 
         while True:
             #Escolha do ativo com tratamento try e except para aceitar id ou nome
-            ler_escolha = input('Digite o ativo deseja visualizar: ').strip().lower()
+            ler_escolha = input('Digite o ativo que deseja visualizar: ').strip().lower()
 
             try:
                 id = int(ler_escolha)
@@ -45,7 +43,7 @@ def ler_crud():    #Le os ativos
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
-
+                    break
         
         for k, v in ativos_dicionario[id].items():          #Mostra o ativo
             if k == 'Tipo':
@@ -96,7 +94,7 @@ def ler_crud():    #Le os ativos
 
 def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
 
-    if id == None:
+    if id is None:
             for k, v in ativos_dicionario.items():
                 print(f'{k} = {v["Nome"]}')
 
@@ -139,9 +137,12 @@ def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
         for i, vuln in enumerate(vulnerabilidades_dicionario[id], start=1): #Mostra as vulnerabilidades para escolha de leitura, como é uma lista, colocoquei o enumarate para enumerar ela e começar do 1
             print(f'[{i}] - {vuln["Vulnerabilidade"]}')
 
-        #Escolha da vulnerabilidade, funciona colocando a opção ou a vulnerabilidade
-        escolha_vulnerabilidade = input('Escolha a vulnerabilidade que deseja ver: ').lower().strip()
+       
         while True:
+             
+            #Escolha da vulnerabilidade, funciona colocando a opção ou a vulnerabilidade
+            escolha_vulnerabilidade = input('Escolha a vulnerabilidade que deseja ver: ').lower().strip()
+
             try: 
                 vn = int(escolha_vulnerabilidade)
                 if vn < 1 or vn > len(vulnerabilidades_dicionario[id]):
@@ -161,7 +162,8 @@ def ler_vulnerabilidade(id=None):       #Le as vulnerabilidades
 
                     if not encontrado:
                         print(f'DIGITE UM VULNERABILIDADE VÁLIDA!')
-                        continue    
+                        continue   
+                    break 
 
 
         vuln_escolhida = vulnerabilidades_dicionario[id][vn - 1]  #Diminui um para compatilidade com a lista

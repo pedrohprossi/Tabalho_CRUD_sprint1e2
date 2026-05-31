@@ -1,5 +1,5 @@
 from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, TipoSeveridade, TipoStatus
-from Modulos_salvar import salvar_ativos, carregar_ativos, salvar_vulnerabilidade, carregar_vulnerabilidade
+from Modulos_salvar import salvar_ativos, salvar_vulnerabilidade
 from Modulos_adicionais import validador_int, validador_str
 
 
@@ -87,6 +87,7 @@ def criar_crud():                      #função de criar do CRUD
         adicionar_vulnerabilidade(id)
 
     else:
+        vulnerabilidades_dicionario[id] = []
         return
 
 
@@ -99,7 +100,7 @@ def criar_crud():                      #função de criar do CRUD
 
 def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
 
-    if id == None:
+    if id is None:
             for k, v in ativos_dicionario.items():
                 print(f'{k} = {v["Nome"]}')
 
@@ -129,6 +130,7 @@ def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
                     if not encontrado:
                         print(f'DIGITE UM NOME VÁLIDO!')
                         continue
+                    break
 
 
     if id not in vulnerabilidades_dicionario:   #Caso crie a vulnerabilidade direto do menu e o ativo não tenha nenhuma outra
@@ -163,7 +165,7 @@ def adicionar_vulnerabilidade(id=None):              #Cria vulnerabilidade
             print(f'[{sta.value}] = {sta.name}')
 
         while True:
-            escolha_status = validador_int(f'Digite o o status da vulnerabilidade do ativo: ')
+            escolha_status = validador_int(f'Digite o status da vulnerabilidade do ativo: ')
             try:
                 status = TipoStatus(escolha_status)
                 break
