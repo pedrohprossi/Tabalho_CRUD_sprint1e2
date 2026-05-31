@@ -1,7 +1,7 @@
 from Ativos import ativos_dicionario, TipoAtivos, vulnerabilidades_dicionario, TipoSeveridade, TipoStatus
 from Modulos_salvar import salvar_ativos, salvar_vulnerabilidade
 from Modulos_adicionais import validador_int, validador_str
-
+import sqlite3
 
 
 
@@ -9,7 +9,6 @@ from Modulos_adicionais import validador_int, validador_str
 
 def obter_id() -> int:
                         #Gera o id do ativo, se não existir nenhum ativo o id = 1
-    import sqlite3
     from Modulos_salvar import DB_NAME, conectar
 
     id_memoria = max(ativos_dicionario.keys()) + 1 if ativos_dicionario else 1
