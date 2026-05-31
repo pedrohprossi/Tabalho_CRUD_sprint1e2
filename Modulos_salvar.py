@@ -77,7 +77,7 @@ def carregar_vulnerabilidade():       #Le as vulnerabilidades do arquivo JSON
         lista_conv_enum = []
         for vuln in lista:
             vulnerabilidade_copia = vuln.copy()
-            vulnerabilidade_copia["Severidade"] =TipoSeveridade(vulnerabilidade_copia["Severidade"])
+            vulnerabilidade_copia["Severidade"] = TipoSeveridade(vulnerabilidade_copia["Severidade"])
             vulnerabilidade_copia["Status"] = TipoStatus(vulnerabilidade_copia["Status"])
             lista_conv_enum.append(vulnerabilidade_copia)
         vulnerabilidade_final[int(k)] = lista_conv_enum
